@@ -1,0 +1,27 @@
+body > .scaffold > :is(top-nav, navigation-rail, side-nav, footer),
+main > :not(:last-child),
+main > :last-child > navigation-tree,
+main .toc-container {
+  display: none;
+}
+
+main > :last-child {
+  margin-top: min(10vmax, 10rem);
+  margin-bottom: min(10vmax, 10rem);
+}
+
+.time-tip {
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 30px;
+  background: #fff0e3;
+  font-size: 13px;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #e58900;
+  position: fixed;
+  bottom: 0;
+}
