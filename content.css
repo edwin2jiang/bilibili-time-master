@@ -1,0 +1,30 @@
+.fixed-reply-box {
+  bottom: 40px !important;
+}
+
+.time-tip {
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 30px;
+  background: #fff0e3;
+  font-size: 13px;
+  z-index: 11;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #e58900;
+  position: fixed;
+  bottom: 0;
+}
+
+.block-page{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  text-align: center;
+  color: #999;
+  background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);
+}

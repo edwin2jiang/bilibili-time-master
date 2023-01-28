@@ -15,17 +15,19 @@
       "32": "images/icon-32.png",
       "48": "images/icon-48.png",
       "128": "images/icon-128.png"
-    }
+    },
+      "default_popup": "popup/popup.html"
   },
   "content_scripts": [
     {
       "js": ["content.js"],
+      "css": [ "content.css" ],
       "matches": [
-        "https://*.bilibili.com/*"
+        "https://www.bilibili.com/*"
       ]
     }
   ],
-  "permissions": ["activeTab", "scripting"],
+  "permissions": ["storage"],
   "background": {
     "service_worker": "background.js"
   },

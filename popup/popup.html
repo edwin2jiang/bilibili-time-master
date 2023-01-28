@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="./popup.css">
+</head>
+
+<body>
+  <div id="app" style="min-width: 400px;">
+
+
+    <button class="add-data">增加数据</button>
+
+    <ul class="time-box">
+
+    </ul>
+
+    <!-- 绑定UID -->
+    <section>
+      <h2>绑定UID</h2>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <input type="text" id="uid" placeholder="输入UID">
+          <button id="bind">绑定</button>
+        </div>
+
+        <a href="https://space.bilibili.com/">UID获取</a>
+        <a href="#">使用教程</a>
+        <div>
+    </section>
+
+    <hr>
+
+
+    <div style="display: flex;justify-content: space-between;font-size: 15px;">
+      <div id="average">
+        本周平均时长: x小时
+      </div>
+      <div>
+        <button id="previous">
+          < </button>
+            <button id="today-dom">2023-xx-xx, 星期x</button>
+            <button id="next"> > </button>
+      </div>
+    </div>
+    <div>
+      <canvas id="myChart"></canvas>
+    </div>
+
+    <hr>
+
+    <section>
+      <h2>每日限额</h2>
+      <div>
+        <input type="time" id="limit" value="00:01">
+        <button id="set-limit">设置</button>
+        <div>
+    </section>
+  </div>
+
+  <script src="./lib/dayjs.min.js"></script>
+  <script src="./lib/isBetween.js"></script>
+  <script src="./lib/chart.js"></script>
+  <script src="./chart.js" type="module"></script>
+  <script src="./popup.js" type="module"></script>
+
+</body>
+
+</html>
