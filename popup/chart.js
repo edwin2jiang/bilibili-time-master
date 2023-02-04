@@ -1,20 +1,23 @@
-// import isBetween from './dayjs/plugin/isBetween';
+import { req } from './common.js'
+
 const isBetween = window.dayjs_plugin_isBetween
 dayjs.extend(isBetween)
 
-
+/**
+ * 让所有的 a 标签在新标签页打开
+ */
 document.addEventListener('DOMContentLoaded', function () {
-  var links = document.getElementsByTagName("a");
+  var links = document.getElementsByTagName('a')
   for (var i = 0; i < links.length; i++) {
-      (function () {
-          var ln = links[i];
-          var location = ln.href;
-          ln.onclick = function () {
-              chrome.tabs.create({active: true, url: location});
-          };
-      })();
+    ;(function () {
+      var ln = links[i]
+      var location = ln.href
+      ln.onclick = function () {
+        chrome.tabs.create({ active: true, url: location })
+      }
+    })()
   }
-});
+})
 
 const ctx = document.getElementById('myChart')
 
@@ -39,24 +42,41 @@ const columnChart = new Chart(ctx, {
   },
 })
 
+/**
+ * 切换展示的时间
+ * @param {*} arr
+ */
 function changeData(arr) {
   columnChart.data.datasets[0].data = arr
   columnChart.update()
 }
 
+/**
+ * 日期转成中文
+ * @param {*} num
+ * @returns
+ */
 function numberToChinese(num) {
   const arr = ['日', '一', '二', '三', '四', '五', '六']
   return arr[num]
 }
 
+/**
+ * 渲染图表数据
+ * @param {} todayDate
+ */
 function renderData(todayDate) {
   // 1. 获取本地数据
   chrome.storage.sync.get(['BM_DATA'], function (items) {
-    console.log('items', items['BM_DATA']['days'])
+
+    // 如果不存在数据，直接返回
+    if (!items['BM_DATA']) {
+      return
+    }
 
     const days = items['BM_DATA']['days']
 
-    const boxDom = document.querySelector('.time-box')
+    console.log('查询到了该用户的数据: ', days)
 
     // 2. 更新图表
     const arr = []
@@ -68,13 +88,13 @@ function renderData(todayDate) {
     const start = dayjs(todayDate).subtract(week, 'day')
     const end = dayjs(todayDate).add(7 - week, 'day')
 
-
-    
     days.forEach((element) => {
       const date = dayjs(element.date)
 
+      console.log('date',date.format("YYYY-MM-DD"), date.isBetween(start, end))
+
       if (date.isBetween(start, end)) {
-        arr[date.format('d')] = element.secs / 3600
+        arr[date.format('d')] = element.sec / 3600
       }
     })
 
@@ -82,22 +102,21 @@ function renderData(todayDate) {
       'YYYY-MM-DD',
     )}, 星期${numberToChinese(week)}`
 
-
-    function countAverage(arr){
+    function countAverage(arr) {
       let sum = 0
       let count = 0
-      arr.forEach(element => {
-        if(element){
+      arr.forEach((element) => {
+        if (element) {
           sum += element
           count++
         }
-      });
+      })
       return isNaN(sum / count) ? 0 : sum / count
-       
     }
-      
-      
-    document.querySelector('#average').innerHTML = `本周平均时长: ${countAverage(arr).toFixed(1)}小时`
+
+    document.querySelector(
+      '#average',
+    ).innerHTML = `本周平均时长: ${countAverage(arr).toFixed(1)}小时`
 
     // 更新数据
     changeData(arr)
@@ -108,16 +127,19 @@ let myRenderDate = dayjs().format('YYYY-MM-DD')
 
 renderData(myRenderDate)
 
-function handleClickPreviousDate(){
+function handleClickPreviousDate() {
   myRenderDate = dayjs(myRenderDate).subtract(7, 'day')
   renderData(myRenderDate)
 }
 
-function handleClickNextDate(){
+function handleClickNextDate() {
   myRenderDate = dayjs(myRenderDate).add(7, 'day')
   renderData(myRenderDate)
 }
 
+/**
+ * 点击上一个和下一个事件
+ */
 document.addEventListener('click', (e) => {
   if (e.target.id === 'previous') {
     handleClickPreviousDate()
@@ -127,30 +149,4 @@ document.addEventListener('click', (e) => {
   }
 })
 
-function handleSetEverydayLimit(){
-  
-  const limit = document.querySelector('#limit').value
-  console.log('limit', limit)
-
-  chrome.storage.sync.get(['BM_DATA'], function (items) {
-    // message('Settings retrieved', items);
-    console.log('Settings retrieved', items['BM_DATA'])
-    const localData = items['BM_DATA']
-
-    // 将时间转化成秒数
-    const time = limit.split(':')
-    localData.limitSec = time[0] * 3600 + time[1] * 60
-
-
-    console.log('localData',localData)
-    chrome.storage.sync.set({ BM_DATA: localData }, function () {
-      console.log('设置成功')
-    })
-
-  });
-
-}
-
-
-document.querySelector('#set-limit').addEventListener('click', handleSetEverydayLimit)
 

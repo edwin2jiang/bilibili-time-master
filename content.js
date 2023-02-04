@@ -1,15 +1,57 @@
+const baseURL ='http://localhost:8080'
+
+async function req(url, method, data) {
+  return await fetch(baseURL + url, {
+    method: method,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+    .then((response) => {
+      return response
+    })
+    .catch((error) => {
+      console.error('Error:', error)
+      return error
+    })
+}
+
 const data = {
   sec: 0,
   days: [],
   limitSec: -1, // -1 代表不设置限制
 }
 
+// 获取今天的标准时间 yyyy-MM-dd
+function getTodayFormatTime() {
+  const date = new Date()
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+
+  return `${year}-${month > 9 ? month : '0' + month}-${
+    day > 9 ? day : '0' + day
+  }`
+}
+
+function getFormatTime(time) {
+  const date = new Date(time)
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+
+  return `${year}-${month > 9 ? month : '0' + month}-${
+    day > 9 ? day : '0' + day
+  }`
+}
+
 let isBlock = false
 
 class EveryDayTime {
-  constructor(date, secs) {
+  constructor(date, sec) {
     this.date = date // 日期（yyyy/MM/dd）
-    this.secs = secs // 使用秒数
+    this.sec = sec // 使用秒数
   }
 }
 
@@ -63,81 +105,68 @@ window.onload = async () => {
 
   timeTipDom.innerText = `🕘 今日使用时长: 加载中...`
 
-  // const analysisBtn = createButton('数据统计', () => {
-  //   // window.open(chrome.runtime.getURL('index.html'))
-  //   chrome.tabs.create({url: chrome.extension.getURL('index.html')});
-  // })
+  // 从数据库中获取数据
+  chrome.storage.sync.get(['BM_BID'], function (items) {
+    const bid = items['BM_BID']
 
-  // timeTipDom.appendChild(analysisBtn)
+    if (!bid) return alert('请先点击插件, 设置B站的UID')
 
-  // 从本地存储中获取数据
-  let localData = null
+    req('/dateUseTime/select?bid=' + bid, 'GET').then(async (res) => {
+      res = await res.json()
+      console.log('get use time', res)
 
-  chrome.storage.sync.get(['BM_DATA'], function (items) {
-    // message('Settings retrieved', items);
-    console.log('Settings retrieved', items['BM_DATA'])
-    localData = items['BM_DATA']
+      data.days = res || []
 
-    console.log('this localData', localData)
+      // 从days从迭代出今天的数据，保存到data中
+      const today = getTodayFormatTime()
+      for (let i = 0; i < data.days.length; i++) {
+        // console.log(getFormatTime(data.days[i].date) , today)
 
-    if (localData) {
-      const localDataObj = localData
-
-      data.sec = localDataObj.sec
-      data.days = localDataObj.days
-
-      const today = new Date().toLocaleDateString()
-
-      if (!isHaveToday(data.days, today)) {
-        data.days.push(new EveryDayTime(today, 0))
-        data.sec = 0
-
-        console.log('没有今天数据')
-
-        chrome.storage.sync.set({ BM_DATA: data }, function () {
-          console.log('Settings saved')
-        })
-      } else {
-        console.log('有今天数据')
-
-        // 已经有了今天的数据，更新今天的数据
-        for (let i = 0; i < data.days.length; i++) {
-          if (data.days[i].date === today) {
-            data.sec = data.days[i].secs
-          }
+        if (getFormatTime(data.days[i].date) === today) {
+          data.sec = data.days[i].sec
+          break
         }
       }
 
       timeTipDom.innerText = `🕘 今日使用时长: ${convertSecond2HourMin(
         data.sec,
       )}`
+      chrome.storage.sync.set({ BM_DATA: data }, function () {})
+    })
 
-      // 检查是否超过时间限制
+    // 加载每日限额
+    req('/user/getByBid?bid=' + bid, 'GET').then(async (res) => {
+      res = await res.json()
+      console.log('get limit time', res)
+      data.limitSec = res.everyDayLimitSec
 
-      if (localDataObj.limitSec !== data.limitSec) {
-        data.limitSec = localDataObj.limitSec
-      }
-
-      checkIsTimeOut()
-    }
-
-    timeTipDom.style = ''
+      chrome.storage.sync.set(
+        { BM_LIMIT: res.everyDayLimitSec },
+        function () {},
+      )
+    })
   })
 }
 
+/**
+ * 检查是否超过限制
+ */
 function checkIsTimeOut() {
-  // 检查是否超过限制
-  if (parseInt(data.limitSec) !== -1 && data.sec > data.limitSec) {
-    // 超过限制
-    // timeTipDom.style = 'color: red'
+  chrome.storage.sync.get(['BM_LIMIT'], function (items) {
+    const limitSec = items['BM_LIMIT']
+    data.limitSec = limitSec
+    // 检查是否超过限制
+    if (parseInt(data.limitSec) !== -1 && data.sec > data.limitSec) {
+      // 超过限制
+      // timeTipDom.style = 'color: red'
 
-    if(isBlock){
-      return
-    }
+      if (isBlock) {
+        return
+      }
 
-    isBlock = true
-    // 拦截用户访问
-    document.querySelector('body').innerHTML = `
+      isBlock = true
+      // 拦截用户访问
+      document.querySelector('body').innerHTML = `
       <div class="block-page">
         <div>
           <h1>您已经超过了今日的使用时长限制</h1>
@@ -145,31 +174,14 @@ function checkIsTimeOut() {
         </div>
       </div>
     `
-  }
+    }
+  })
 }
 
-// 5秒钟更新一次本地时间
-setInterval(() => {
-  // data.sec += 5
-  // console.log(data.sec)
 
-  const today = new Date().toLocaleDateString()
-  if (!isHaveToday(data.days, today)) {
-    data.days.push(new EveryDayTime(today, 0))
-    data.sec = 0
-  } else {
-    // 已经有了今天的数据，更新今天的数据
-    for (let i = 0; i < data.days.length; i++) {
-      if (data.days[i].date === today) {
-        data.days[i].secs += 5
-        data.sec = data.days[i].secs
-      }
-    }
-  }
-
-  console.log('data', data)
-
-  // localStorage.setItem('BM_DATA', JSON.stringify(data))
+function renderLocalData() {
+  data.sec += 5
+  timeTipDom.innerText = `🕘 今日使用时长: ${convertSecond2HourMin(data.sec)}`
 
   chrome.storage.sync.get(['BM_DATA'], function (storage) {
     const localDataObj = storage['BM_DATA']
@@ -188,5 +200,27 @@ setInterval(() => {
     checkIsTimeOut()
   })
 
-  timeTipDom.innerText = `🕘 今日使用时长: ${convertSecond2HourMin(data.sec)}`
-}, 5000)
+  // 将数据保存到远程数据库
+
+  if (data.sec % 60 !== 0) {
+    // 每隔60秒保存一次
+    return
+  }
+
+  chrome.storage.sync.get('BM_BID', function (items) {
+    const bid = items['BM_BID']
+
+    if (bid) {
+      // 更新新的使用时间
+
+      const postData = { bid, date: getTodayFormatTime(), sec: data.sec }
+
+      console.log('更新新的使用时间', postData)
+
+      req('/dateUseTime/addAndUpdate', 'POST', postData)
+    }
+  })
+}
+
+// 5秒钟更新一次本地时间
+setInterval(renderLocalData, 5000)

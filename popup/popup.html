@@ -13,7 +13,7 @@
   <div id="app" style="min-width: 400px;">
 
 
-    <button class="add-data">增加数据</button>
+    <button class="add-data">清空本地存储</button>
 
     <ul class="time-box">
 
@@ -24,8 +24,8 @@
       <h2>绑定UID</h2>
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <div>
-          <input type="text" id="uid" placeholder="输入UID">
-          <button id="bind">绑定</button>
+          <input type="text" id="bid" placeholder="输入UID">
+          <button id="bind-bid">绑定</button>
         </div>
 
         <a href="https://space.bilibili.com/">UID获取</a>
@@ -33,40 +33,48 @@
         <div>
     </section>
 
-    <hr>
+
+    <div class="more">
 
 
-    <div style="display: flex;justify-content: space-between;font-size: 15px;">
-      <div id="average">
-        本周平均时长: x小时
-      </div>
-      <div>
-        <button id="previous">
-          < </button>
-            <button id="today-dom">2023-xx-xx, 星期x</button>
-            <button id="next"> > </button>
-      </div>
-    </div>
-    <div>
-      <canvas id="myChart"></canvas>
-    </div>
+      <hr>
 
-    <hr>
-
-    <section>
-      <h2>每日限额</h2>
-      <div>
-        <input type="time" id="limit" value="00:01">
-        <button id="set-limit">设置</button>
+      <div style="display: flex;justify-content: space-between;font-size: 15px;">
+        <div id="average">
+          本周平均时长: x小时
+        </div>
         <div>
-    </section>
+          <button id="previous">
+            < </button>
+              <button id="today-dom">2023-xx-xx, 星期x</button>
+              <button id="next"> > </button>
+        </div>
+      </div>
+      <div>
+        <canvas id="myChart"></canvas>
+      </div>
+
+      <hr>
+
+      <section>
+        <h2>每日限额</h2>
+        <div>
+          <input type="time" id="limit" value="00:01">
+          <button id="set-limit">设置</button>
+          <div>
+      </section>
+
+    </div>
+
   </div>
 
   <script src="./lib/dayjs.min.js"></script>
   <script src="./lib/isBetween.js"></script>
+  <script src="./lib/duration.js"></script>
+  <script src="./common.js" type="module"></script>
   <script src="./lib/chart.js"></script>
-  <script src="./chart.js" type="module"></script>
   <script src="./popup.js" type="module"></script>
+  <script src="./chart.js" type="module"></script>
 
 </body>
 
