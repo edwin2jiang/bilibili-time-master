@@ -4,17 +4,17 @@
   "description": "帮助您更加健康的使用B站, 拒绝沉迷, 良性使用",
   "version": "1.0",
   "icons": {
-    "16": "images/icon-16.png",
-    "32": "images/icon-32.png",
-    "48": "images/icon-48.png",
-    "128": "images/icon-128.png"
+    "16": "images/favicon-16x16.png",
+    "32": "images/favicon-32x32.png",
+    "48": "images/favicon-48x48.png",
+    "128": "images/favicon-128x128.png"
   },
   "action": {
     "default_icon": {
-      "16": "images/icon-16.png",
-      "32": "images/icon-32.png",
-      "48": "images/icon-48.png",
-      "128": "images/icon-128.png"
+      "16": "images/favicon-16x16.png",
+      "32": "images/favicon-32x32.png",
+      "48": "images/favicon-48x48.png",
+      "128": "images/favicon-128x128.png"
     },
     "default_popup": "popup/popup.html"
   },
@@ -35,7 +35,8 @@
     "storage"
   ],
   "host_permissions": [
-    "http://localhost/*"
+    "http://localhost/*",
+    "https://fctest.appletest.cn/*"
   ],
   "commands": {
     "_execute_action": {

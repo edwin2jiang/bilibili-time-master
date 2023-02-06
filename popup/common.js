@@ -1,4 +1,4 @@
-const baseURL = 'http://localhost:8080'
+const baseURL = 'https://fctest.appletest.cn'
 
 export async function req(url, method, data) {
   return await fetch(baseURL + url, {

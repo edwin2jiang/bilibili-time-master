@@ -1,4 +1,4 @@
-const baseURL ='http://localhost:8080'
+const baseURL = 'https://fctest.appletest.cn'
 
 async function req(url, method, data) {
   return await fetch(baseURL + url, {
@@ -87,7 +87,6 @@ window.onload = async () => {
 
   // 去除广告屏蔽-修改提示
   const adDom = document.querySelector('.adblock-tips')
-
   if (adDom) {
     adDom.style.display = 'none'
   }
@@ -99,10 +98,9 @@ window.onload = async () => {
     sendBarrageDoms[0].style.bottom = '40px'
   }
 
-  // 创建一个新的元素
+  // 创建底部的今日使用时间提示
   timeTipDom.className = 'time-tip'
   document.querySelector('body').appendChild(timeTipDom)
-
   timeTipDom.innerText = `🕘 今日使用时长: 加载中...`
 
   // 从数据库中获取数据
@@ -111,6 +109,7 @@ window.onload = async () => {
 
     if (!bid) return alert('请先点击插件, 设置B站的UID')
 
+    // 加载每天的数据
     req('/dateUseTime/select?bid=' + bid, 'GET').then(async (res) => {
       res = await res.json()
       console.log('get use time', res)
@@ -144,8 +143,12 @@ window.onload = async () => {
         { BM_LIMIT: res.everyDayLimitSec },
         function () {},
       )
+
+      checkIsTimeOut()
     })
   })
+
+  
 }
 
 /**
@@ -158,7 +161,6 @@ function checkIsTimeOut() {
     // 检查是否超过限制
     if (parseInt(data.limitSec) !== -1 && data.sec > data.limitSec) {
       // 超过限制
-      // timeTipDom.style = 'color: red'
 
       if (isBlock) {
         return

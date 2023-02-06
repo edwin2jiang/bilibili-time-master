@@ -7,9 +7,7 @@ dayjs.extend(duration)
  * 测试
  */
 document.querySelector('.add-data').addEventListener('click', function () {
-  
   chrome.storage.sync.clear();
-
 })
 
 /**
@@ -18,7 +16,7 @@ document.querySelector('.add-data').addEventListener('click', function () {
 document
   .querySelector('#bind-bid')
   .addEventListener('click', async function () {
-    const bid = document.querySelector('#bid').value
+    const bid = document.querySelector('#bid').value.trim()
     if (!bid) {
       return alert('bid 不能为空')
     }
@@ -32,9 +30,14 @@ document
 
     req('/user/add', 'POST', data).then((res) => {
       console.log('this data', res)
+
+      window.location.reload()
     })
+
   })
 
+
+// 程序正常执行
 window.onload = function () {
   // 加载已经保存的BID
   chrome.storage.sync.get(['BM_BID', 'BM_LIMIT'], function (items) {
