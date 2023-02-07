@@ -13,7 +13,7 @@
   <div id="app" style="min-width: 400px;">
 
 
-    <button class="add-data">清空本地存储</button>
+    <button class="add-data  css-button-shadow--sand">清空本地存储</button>
 
     <ul class="time-box">
 
@@ -24,12 +24,13 @@
       <h2>绑定UID</h2>
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <div>
-          <input type="text" id="bid" placeholder="输入UID">
-          <button id="bind-bid">绑定</button>
+          <input type="text" id="bid" placeholder="输入UID" style="height: 20px; border-radius: 4px; border-color: #aaa;">
+          <button id="bind-bid" class="css-button-shadow--sand">绑定</button>
         </div>
 
         <a href="https://space.bilibili.com/">UID获取</a>
-        <a href="#">使用教程</a>
+        <a
+          href="https://meeting.tencent.com/meetlog/detail/index.html?s=VsJmv2zPY4K7zv7RsXKJU5e1TErSeJ64Bphf6Bdtbfg">使用教程</a>
         <div>
     </section>
 
@@ -43,38 +44,37 @@
         <div id="average">
           本周平均时长: x小时
         </div>
-        <div>
-          <button id="previous">
-            < </button>
-              <button id="today-dom">2023-xx-xx, 星期x</button>
-              <button id="next"> > </button>
+        <div class="time-area" style="display: flex;">
+            <div id="previous" class="arrow left"> &lt; </div>
+            <div id="today-dom" class="time">2023-xx-xx, 星期x</div>
+            <div id="next" class="arrow right"> &gt; </div>
         </div>
-      </div>
-      <div>
-        <canvas id="myChart"></canvas>
-      </div>
-
-      <hr>
-
-      <section>
-        <h2>每日限额</h2>
+        </div>
         <div>
-          <input type="time" id="limit" value="00:01">
-          <button id="set-limit">设置</button>
+          <canvas id="myChart"></canvas>
+        </div>
+
+        <hr>
+
+        <section>
+          <h2>每日限额</h2>
           <div>
-      </section>
+            <input type="time" id="limit" value="00:01">
+            <button id="set-limit" class="css-button-shadow--sand">设置</button>
+            <div>
+        </section>
+
+      </div>
 
     </div>
 
-  </div>
-
-  <script src="./lib/dayjs.min.js"></script>
-  <script src="./lib/isBetween.js"></script>
-  <script src="./lib/duration.js"></script>
-  <script src="./common.js" type="module"></script>
-  <script src="./lib/chart.js"></script>
-  <script src="./popup.js" type="module"></script>
-  <script src="./chart.js" type="module"></script>
+    <script src="./lib/dayjs.min.js"></script>
+    <script src="./lib/isBetween.js"></script>
+    <script src="./lib/duration.js"></script>
+    <script src="./common.js" type="module"></script>
+    <script src="./lib/chart.js"></script>
+    <script src="./popup.js" type="module"></script>
+    <script src="./chart.js" type="module"></script>
 
 </body>
 

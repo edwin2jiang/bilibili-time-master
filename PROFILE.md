@@ -12,4 +12,8 @@ Bilibili是一个类似于Youtube的视频网站，主要服务于中国用户�
 
 本插件使用了content.js和popup.js，为了更加方便的进行数据通信，采用storage作为桥梁，来进行数据的交互。同时需要持久化存储今日使用的时间，防止刷新后数据消失。采用了chrome.storage.sync来进行数据的持久化存储。
 
-Bilibili是一个类似于Youtube的视频网站，主要服务于中国用户. 由于本插件是针对"bilibili.com"使用的, 帮助用户不沉迷于刷B站上的短视频，将重心放在现实中的生活上,所以需要Host Permission来访问bilibili.com.同时为了保证数据能够跨设备同步, 需要对用户的数据进行保存到数据库中, 当两台电脑绑定同一个UID时,能够保证数据是同步的. 同时保证用户更换电脑, 该数据不丢失. 所以需要对服务器进行访问, 以便于将数据保存到数据库中. 也就是用到host permission（"https://fctest.appletest.cn/*"）的原因. 
+Bilibili是一个类似于Youtube的视频网站，主要服务于中国用户. 由于本插件是针对"bilibili.com"使用的, 帮助用户不沉迷于刷B站上的短视频，将重心放在现实中的生活上,所以需要Host Permission来访问bilibili.com.同时为了保证数据能够跨设备同步, 需要对用户的数据进行保存到数据库中, 当两台电脑绑定同一个UID时,能够保证数据是同步的. 同时保证用户更换电脑, 该数据不丢失. 所以需要对服务器进行访问, 以便于将数据保存到数据库中. 也就是用到host permission（"https://fctest.appletest.cn/*"）的原因.
+
+
+In my case, my extension is a free (not for profit) extension that does not really handle or store user information, nor does it track data. So I may try doing what others have done and just spell that out in the description.
+

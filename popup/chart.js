@@ -30,6 +30,7 @@ const columnChart = new Chart(ctx, {
         label: '使用时长（小时）',
         data: [12, 19, 3, 5, 2, 3],
         borderWidth: 1,
+        // backgroundColor: '#9BD0F5',
       },
     ],
   },

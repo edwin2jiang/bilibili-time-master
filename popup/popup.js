@@ -26,6 +26,7 @@ document
     // 在存储中记录下bid
     chrome.storage.sync.set({ BM_BID: bid }, function () {
       console.log('设置BID成功')
+      alert('设置BID成功, 请刷新页面')
     })
 
     req('/user/add', 'POST', data).then((res) => {
