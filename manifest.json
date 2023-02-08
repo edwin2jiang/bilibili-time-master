@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "B站时间管理大师",
-  "description": "帮助您更加健康的使用B站, 拒绝沉迷, 良性使用",
+  "name": "bilibili-time-manager",
+  "description": "Help users use Station \"bilibili.com\" more healthily, refuse to indulge and use it benign",
   "version": "1.0",
   "icons": {
     "16": "images/favicon-16x16.png",
